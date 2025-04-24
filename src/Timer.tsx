@@ -1,11 +1,24 @@
+import { useState, useEffect } from 'react';
+
 /**
- * This timer component displays a countdown timer. At this point, the
- * timer does not yet do anything.
+ * This timer component displays a countdown timer. The timer starts
+ * at 15 minutes and counts down to 0.
  */
 export default function Timer() {
+    const [timeLeft, setTimeLeft] = useState(15 * 60);
 
-    const minutes = 15;
-    const seconds = 0;
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setTimeLeft(time => Math.max(time - 1, 0));
+        }, 1_000);
+
+        // return cleanup function to remove the interval
+        return () => clearInterval(intervalId);
+    }, []);
+
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+
     const timeString = `${leftPad(minutes)}:${leftPad(seconds)}`;
 
     return (
