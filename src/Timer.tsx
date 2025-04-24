@@ -6,15 +6,20 @@ import { useState, useEffect } from 'react';
  */
 export default function Timer() {
     const [timeLeft, setTimeLeft] = useState(15 * 60);
+    const [running, setRunning] = useState(false);
 
     useEffect(() => {
+        if (!running) {
+            return; // the timer is not running, do nothing
+        }
+
         const intervalId = setInterval(() => {
             setTimeLeft(time => Math.max(time - 1, 0));
         }, 1_000);
 
         // return cleanup function to remove the interval
         return () => clearInterval(intervalId);
-    }, []);
+    }, [running]);
 
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
@@ -25,6 +30,9 @@ export default function Timer() {
         <div>
             <section>
                 <time>{timeString}</time>
+            </section>
+            <section>
+                <button onClick={() => setRunning(!running)}>{running ? 'Pause' : 'Start'}</button>
             </section>
         </div>
     );
