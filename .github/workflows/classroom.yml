@@ -1,0 +1,113 @@
+name: Autograding Tests
+on:
+  push:
+    branches: ['main']
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run eslint
+      id: linting-ok
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Run eslint
+        setup-command: ''
+        command: npm run lint
+        timeout: 1
+        max-score: 10
+
+    - name: Run build
+      id: build-ok
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Run build
+        setup-command: ''
+        command: npm run build
+        timeout: 1
+        max-score: 15
+
+    - name: Branch 1 - workflows
+      id: workflows-merged
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: Branch 1 - wBranch 1 - workflowsorkflows
+        command: 'cat .github/workflows/build.yml'
+        input: ''
+        expected-output: 'install'
+        comparison-method: 'contains'
+        timeout: 1
+        max-score: 15
+
+    - name: Branch 2 - countdown
+      id: countdown-merged
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: 'Branch 2 - countdown'
+        command: 'cat src/Timer.tsx'
+        input: ''
+        expected-output: 'timeLeft'
+        comparison-method: 'contains'
+        timeout: 1
+        max-score: 15
+
+    - name: Branch 3 - styling
+      id: styling-merged
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: 'Branch 3 - styling'
+        command: 'ls -la src/'
+        input: ''
+        expected-output: 'Timer.css'
+        comparison-method: 'contains'
+        timeout: 1
+        max-score: 15
+
+    - name: Branch 4 - pause-resume
+      id: pause-resume-merged
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: 'Branch 4 - pause-resume'
+        command: 'cat src/Timer.tsx'
+        input: ''
+        expected-output: 'running'
+        comparison-method: 'contains'
+        timeout: 1
+        max-score: 15
+
+    - name: Branch 5 - adjust-time
+      id: adjust-time-merged
+      uses: classroom-resources/autograding-io-grader@v1
+      with:
+        test-name: 'Branch 5 - adjust-time'
+        command: 'cat src/Timer.tsx'
+        input: ''
+        expected-output: 'adjustTime'
+        comparison-method: 'contains'
+        timeout: 1
+        max-score: 15
+
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        LINTING-OK_RESULTS: "${{steps.linting-ok.outputs.result}}"
+        BUILD-OK_RESULTS: "${{steps.build-ok.outputs.result}}"
+        WORKFLOWS-MERGED_RESULTS: "${{steps.workflows-merged.outputs.result}}"
+        COUNTDOWN-MERGED_RESULTS: "${{steps.countdown-merged.outputs.result}}"
+        STYLING-MERGED_RESULTS: "${{steps.styling-merged.outputs.result}}"
+        PAUSE-RESUME-MERGED_RESULTS: "${{steps.pause-resume-merged.outputs.result}}"
+        ADJUST-TIME-MERGED_RESULTS: "${{steps.adjust-time-merged.outputs.result}}"
+
+      with:
+        runners: linting-ok,build-ok,workflows-merged,countdown-merged,styling-merged,pause-resume-merged,adjust-time-merged
