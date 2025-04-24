@@ -23,9 +23,9 @@ services:
     ports:
       - '5173:5173'
 
-    # Use polling to detect file changes in the container under Windows hosts.
+    # Use polling to detect source code changes under Windows hosts.
     # See https://vite.dev/config/server-options#server-watch.
-    env:
+    environment:
       - CHOKIDAR_USEPOLLING=true
 
     # Mount source code for live reload
