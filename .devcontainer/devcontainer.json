@@ -1,0 +1,21 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node
+{
+    "name": "Merge exercise",
+    "image": "mcr.microsoft.com/devcontainers/javascript-node",
+    "remoteEnv": {
+        // Use polling to detect file changes in the container. Applies to Vite dev server: https://vite.dev/config/server-options#server-watch
+        "CHOKIDAR_USEPOLLING": "true",
+        // Poll for file changes every second (1000 ms) instead of the default 100 ms. Reduces CPU usage.
+        "CHOKIDAR_INTERVAL": "1000",
+        // dependency cooldown period to protect against supply chain attacks
+        "npm_config_min_release_age": "7",
+        // ignore pre and post install scripts from packages by default
+        "npm_config_ignore_scripts": "true"
+    },
+    "mounts": [
+        // See https://code.visualstudio.com/remote/advancedcontainers/improve-performance#_use-a-targeted-named-volume
+        "type=volume,source=node_modules_cache,target=${containerWorkspaceFolder}/node_modules/"
+    ],
+    "postCreateCommand": "sudo chown node:node node_modules -R"
+}
