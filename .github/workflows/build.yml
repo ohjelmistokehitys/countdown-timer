@@ -23,7 +23,7 @@ jobs:
         run: npm run lint
 
       - name: Build
-        run: npm run build
+        run: npm run build --base=/countdown-timer/
 
       - name: Upload built app
         uses: actions/upload-pages-artifact@v3
