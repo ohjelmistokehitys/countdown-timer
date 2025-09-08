@@ -1,11 +1,22 @@
-FROM node:latest
+FROM node:latest AS build
 
 WORKDIR /app
 
-COPY . .
 
+# user related stuff
+RUN adduser appuser
+RUN chown appuser /app
+USER appuser
+
+# dependency related stuff
+COPY --chown=appuser package*.json ./
 RUN npm install
 
-EXPOSE 5173
+# our own app related stuff
+COPY --chown=appuser . .
 
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+RUN npm run build
+
+
+FROM nginx AS production
+COPY --from=build /app/dist /usr/share/nginx/html

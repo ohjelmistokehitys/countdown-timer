@@ -1,1 +1,9 @@
 node_modules
+Dockerfile
+.git
+.dockerignore
+.gitattributes
+.github
+.gitignore
+readme.md
+screenshots
