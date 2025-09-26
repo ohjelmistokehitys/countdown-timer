@@ -20,5 +20,5 @@ RUN npm run build
 
 
 # our production build, that uses nginx base image
-FROM nginx AS production
+FROM nginxinc/nginx-unprivileged AS production
 COPY --from=build /app/dist /usr/share/nginx/html
