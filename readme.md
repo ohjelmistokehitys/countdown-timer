@@ -241,15 +241,22 @@ Now that the countdown timer works, an important feature that users have request
 When you have verified that the changes are correct and that the app works as expected, push your code to GitHub and check the GitHub Actions workflows again. The building workflow should still succeed, and you should see more points in the grading workflow.
 
 
-## 6. Merge the `feature/adjust-time` branch (merge conflict)
+## 6. Merge the `feature/adjust-time` branch (merge conflict ❌)
 
 Many users have reported that they would like to be able to adjust the countdown time. The `feature/adjust-time` branch implements this feature, allowing users to adjust the countdown time either before starting the timer or during countdown.
 
-Unfortunately, while the `feature/adjust-time` branch implements this cool feature, it has been developed in parallel with the `feature/pause-resume` branch. This means that both branches contain changes in the same lines of code in the [Timer.tsx](./src/Timer.tsx) file.
+The `feature/adjust-time` branch implements this cool new feature, but it has been developed in parallel with the `feature/pause-resume` branch. This means that both branches contain changes in the same lines of code in the [Timer.tsx](./src/Timer.tsx) file.
 
-Both branches have added new buttons in the same place, but the buttons are different. You will need to keep both sets of buttons in the final version. There is also a change in the `useEffect` section in the code, that now checks if the timer is `running` or not. You should keep the `trunk` version of the `useEffect` function and `running` variable, as they were a part of the previously merged into `trunk` from the `feature/pause-resume` branch.
+Both branches have added new buttons, state variables and functions, and git will not be able to automatically combine these changes. The buttons are added to the same place in the UI, and both branches have added new variables on the same lines. For example:
 
-Merge conflicts are a common situation when working with Git, and it is important to learn how to resolve them.
+```diff
+// these changes need to be combined manually, as we want to keep both the pause/resume and adjust time features:
+
+- const { minutes, seconds, running, setRunning } = useTimer();
++ const { minutes, seconds, adjustTime } = useTimer();
+```
+
+Merge conflicts are a common situation when working with Git, and it is important to learn how to resolve them. Some times it may be possible to simply "accept incoming changes" or "accept current changes", but in this case you will need to combine the changes manually to get the desired functionality.
 
 Start the merge process as before, either by creating a local branch that tracks the remote `feature/adjust-time` branch and then merging it into `trunk`, or by merging the remote `origin/feature/adjust-time` branch directly into `trunk` without creating a local branch.
 
@@ -277,7 +284,7 @@ Resolving the conflicts require a few steps:
 
 1. take note of the files containing conflicts reported by `git status`
 2. review and edit the conflicting files one by one to fix the conflicts
-3. verify that the changes are correct and that the app still works as expected
+3. verify that the changes are correct and that the app still works as expected in your browser
 4. mark the edited files as resolved with `git add`
 5. commit the changes with `git commit`. No commit message is needed, as Git will propose a merge commit message.
 
