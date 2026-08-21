@@ -13,7 +13,7 @@ You will not need to write new code, but you will need to understand a bit of th
 >
 > We recommend using a [GitHub Codespace](https://github.com/features/codespaces) or a development container, which already have Node.js and npm installed. See the [VS Code documentation](https://code.visualstudio.com/docs/devcontainers/containers) for more information about development containers.
 >
-> Alternatively, if you are familiar with [Docker](https://www.docker.com/), you can use the provided [Dockerfile](./Dockerfile) and [docker-compose.yml](./docker-compose.yml) to run the application in a container.
+> Alternatively, if you are familiar with [Docker](https://www.docker.com/), you can use the provided [Dockerfile](./Dockerfile) and [compose.yml](./compose.yml) to run the application in a container.
 
 
 ## About the app
@@ -130,7 +130,7 @@ Alternatively, you can use Docker and build and run the app in a container with 
 
 ```bash
 # build and run the app in a container
-docker-compose up --build
+docker compose up --build
 ```
 
 Regardless of the method you use, the app should now be running and accessible in your browser at the URL printed in the terminal (usually `http://localhost:5173`). Open your browser and navigate to that URL to verify that the initial state of the app is working.

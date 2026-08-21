@@ -19,4 +19,4 @@ EXPOSE 5173
 # Default command: start Vite dev server, binding to all interfaces
 CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
 
-# You can build & run everything with Docker Compose (see docker-compose.yml).
+# You can build & run everything with Docker Compose (see compose.yml).
