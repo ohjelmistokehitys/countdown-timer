@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 
 /**
- * This timer component displays a countdown timer. At this point, the
- * timer does not yet do anything.
+ * This timer component displays a countdown timer.
  */
 export default function Timer() {
-    const { minutes, seconds } = useTimer();
+    const { minutes, seconds, adjustTime } = useTimer();
 
     const timeString = `${leftPad(minutes)}:${leftPad(seconds)}`;
 
@@ -13,6 +12,18 @@ export default function Timer() {
         <div>
             <section>
                 <time>{timeString}</time>
+            </section>
+
+            <section role="group">
+                <button className="outline" onClick={() => adjustTime(+300)}>+5 min</button>
+                <button className="outline" onClick={() => adjustTime(+60)}>+1 min</button>
+                <button className="outline" onClick={() => adjustTime(+30)}>+30 sec</button>
+            </section>
+
+            <section role="group">
+                <button className="outline" onClick={() => adjustTime(-300)}>-5 min</button>
+                <button className="outline" onClick={() => adjustTime(-60)}>-1 min</button>
+                <button className="outline" onClick={() => adjustTime(-30)}>-30 sec</button>
             </section>
         </div>
     );
@@ -24,15 +35,8 @@ export default function Timer() {
  * the current minutes and seconds left in the countdown.
  */
 function useTimer() {
+    // Seconds left in the countdown, initialized to 15 minutes
     const [timeLeft, setTimeLeft] = useState(15 * 60);
-
-    /**
-     * Adjusts the timer by the specified number of seconds (positive or
-     * negative). The timer will never go below zero.
-     */
-    function adjustTime(seconds: number) {
-        setTimeLeft(time => Math.max(time + seconds, 0));
-    }
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -41,6 +45,14 @@ function useTimer() {
 
         return () => clearInterval(intervalId);
     }, []);
+
+    /**
+     * Adjusts the timer by the specified number of seconds (positive or
+     * negative). The timer will never go below zero.
+     */
+    function adjustTime(seconds: number) {
+        setTimeLeft(time => Math.max(time + seconds, 0));
+    }
 
     return {
         minutes: Math.floor(timeLeft / 60),
