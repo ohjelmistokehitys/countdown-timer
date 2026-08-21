@@ -26,6 +26,14 @@ export default function Timer() {
 function useTimer() {
     const [timeLeft, setTimeLeft] = useState(15 * 60);
 
+    /**
+     * Adjusts the timer by the specified number of seconds (positive or
+     * negative). The timer will never go below zero.
+     */
+    function adjustTime(seconds: number) {
+        setTimeLeft(time => Math.max(time + seconds, 0));
+    }
+
     useEffect(() => {
         const intervalId = setInterval(() => {
             setTimeLeft(time => Math.max(time - 1, 0));
@@ -36,7 +44,8 @@ function useTimer() {
 
     return {
         minutes: Math.floor(timeLeft / 60),
-        seconds: timeLeft % 60
+        seconds: timeLeft % 60,
+        adjustTime
     };
 }
 
