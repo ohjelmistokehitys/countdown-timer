@@ -247,16 +247,11 @@ Many users have reported that they would like to be able to adjust the countdown
 
 The `feature/adjust-time` branch implements this cool new feature, but it has been developed in parallel with the `feature/pause-resume` branch. This means that both branches contain changes in the same lines of code in the [Timer.tsx](./src/Timer.tsx) file.
 
-Both branches have added new buttons, state variables and functions, and git will not be able to automatically combine these changes. The buttons are added to the same place in the UI, and both branches have added new variables on the same lines. For example:
-
-```diff
-// these changes need to be combined manually, as we want to keep both the pause/resume and adjust time features:
-
-- const { minutes, seconds, running, setRunning } = useTimer();
-+ const { minutes, seconds, adjustTime } = useTimer();
-```
+Both branches have added new buttons, state variables and functions, and git will not be able to automatically combine these changes. The buttons are added to the same place in the UI, and both branches have added new variables on the same lines.
 
 Merge conflicts are a common situation when working with Git, and it is important to learn how to resolve them. Some times it may be possible to simply "accept incoming changes" or "accept current changes", but in this case you will need to combine the changes manually to get the desired functionality.
+
+**Starting the merge**
 
 Start the merge process as before, either by creating a local branch that tracks the remote `feature/adjust-time` branch and then merging it into `trunk`, or by merging the remote `origin/feature/adjust-time` branch directly into `trunk` without creating a local branch.
 
@@ -280,7 +275,9 @@ Unmerged paths:
         both modified:   src/Timer.tsx
 ```
 
-Resolving the conflicts require a few steps:
+**Resolving the merge conflict**
+
+Resolving conflicts require a few steps:
 
 1. take note of the files containing conflicts reported by `git status`
 2. review and edit the conflicting files one by one to fix the conflicts
@@ -289,6 +286,34 @@ Resolving the conflicts require a few steps:
 5. commit the changes with `git commit`. No commit message is needed, as Git will propose a merge commit message.
 
 See the full [resolving a merge conflict using the command line (GitHub)](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line) article for more information and more detailed steps.
+
+**The conflicting lines**
+
+In this case, one of the conflicting lines contains a call to `useTimer()` function. The line was changed in the `feature/pause-resume` branch to include the `running` and `setRunning` variables:
+
+```diff
+- const { minutes, seconds } = useTimer();
++ const { minutes, seconds, running, setRunning } = useTimer();
+```
+
+The same line had a different change in the `feature/adjust-time` branch, where the `adjustTime` function was added:
+
+```diff
+- const { minutes, seconds } = useTimer();
++ const { minutes, seconds, adjustTime } = useTimer();
+```
+
+These changes affect the same line and Git will not be able to automatically combine them. This is why you will need to resolve the merge conflict manually. The final result should be relatively straightforward, even if you are not familiar with React or other technologies used in the app. The merged result for this particular line should look something like this:
+
+```diff
+- const { minutes, seconds, running, setRunning } = useTimer();
+- const { minutes, seconds, adjustTime } = useTimer();
++ const { minutes, seconds, running, setRunning, adjustTime } = useTimer();
+```
+
+There are also other conflicting lines in the same file, where you will need to combine the changes from both branches. The final result should include all the new buttons and functionality from both branches.
+
+**Committing the merge**
 
 When you have modified the file make sure that the timer app works as expected. You should be able to adjust the time using the new buttons, as well as pause and resume the timer. After the issue is resolved, mark the file as resolved using `git add src/Timer.tsx`, and then continue the merge by committing the changes with `git commit`. Note that you should not define a commit message, as Git is already in the middle of a merge and will use the default merge commit message.
 
