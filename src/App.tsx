@@ -1,3 +1,4 @@
+import "./Timer.css";
 import Timer from "./Timer.tsx";
 
 function App() {
