@@ -1,22 +1,32 @@
-# Use an official lightweight Node.js image as the base image:
-FROM node:slim
+FROM node:24 AS base
 
-# Set working directory in container:
 WORKDIR /app
 
-# First, copy only package files to leverage Docker cache:
-COPY package*.json ./
+COPY package* .
 
-# Install dependencies in the container:
-RUN npm install
+RUN npm ci --ignore-scripts
 
-# Copy the rest of the source code
-COPY . ./
+COPY . /app
 
-# Expose Vite default dev port:
+RUN chown -R node:node .
+
+USER node
+
+
+FROM base AS dev
+
 EXPOSE 5173
 
-# Default command: start Vite dev server, binding to all interfaces
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+CMD ["npm", "run", "dev", "--", "--host"]
 
-# You can build & run everything with Docker Compose (see compose.yml).
+
+FROM base AS builder
+
+RUN npm run build
+
+
+
+FROM nginx AS runner
+
+COPY --from=builder /app/dist /usr/share/nginx/html
+
