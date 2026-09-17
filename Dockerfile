@@ -22,6 +22,10 @@ CMD ["npm", "run", "dev", "--", "--host"]
 
 FROM base AS builder
 
+ARG TITLE
+
+ENV VITE_APP_TITLE=$TITLE
+
 RUN npm run build
 
 

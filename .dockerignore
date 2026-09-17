@@ -30,3 +30,4 @@ Dockerfile
 compose.yml
 screenshots
 backend
+*.env
